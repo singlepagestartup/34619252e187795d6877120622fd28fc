@@ -1,0 +1,12 @@
+name: Seed database
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - seed-database
+
+jobs:
+  fill-database-with-seed-data:
+    uses: ./.github/workflows/database.yml
+    secrets: inherit

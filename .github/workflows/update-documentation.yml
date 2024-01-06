@@ -1,0 +1,15 @@
+name: Update documentation
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - update-documentation
+
+jobs:
+  update-documentation:
+    uses: ./.github/workflows/documentation.yml
+    secrets: inherit
+    with:
+      TAG: ${{ github.sha }}
+      PRERELEASE: false

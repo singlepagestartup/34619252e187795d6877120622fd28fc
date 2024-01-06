@@ -1,0 +1,15 @@
+name: Update backend
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - update-backend
+
+jobs:
+  update-backend:
+    uses: ./.github/workflows/backend.yml
+    secrets: inherit
+    with:
+      TAG: ${{ github.sha }}
+      PRERELEASE: false
