@@ -1,0 +1,27 @@
+name: Get upstream
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - upstream
+
+jobs:
+  fetch-upstream:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+      - name: fetch and push
+        env:
+          UPSTREAM: https://github.com/singlepagestartup/sps-lite.git
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+
+          git remote add upstream "${UPSTREAM}"
+          git config pull.rebase false
+          git pull upstream main -s recursive -X theirs --allow-unrelated-histories
+          git ls-files --unmerged | perl -n -e'/\t(.*)/ && print "$1\n"' | uniq | xargs -r git checkout --theirs --
+          git push origin upstream

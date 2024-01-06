@@ -1,0 +1,42 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "trace": true,
+      "sourceMaps": true,
+      "outputCapture": "std",
+      "name": "backend",
+      "runtimeVersion": "18",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "debug", "--preserve-symlinks"],
+      "cwd": "${workspaceFolder}/backend",
+      "localRoot": "${workspaceFolder}/backend",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    // This is for debugging the frontend server side
+    // Client side can be debugging in Chrome -> Source -> Left side bar -> Add filesystem and add current directory
+    {
+      "name": "frontend",
+      "type": "node",
+      "request": "launch",
+      "trace": true,
+      "sourceMaps": true,
+      "outputCapture": "std",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "dev"],
+      "cwd": "${workspaceFolder}/frontend",
+      "localRoot": "${workspaceFolder}/frontend",
+      "skipFiles": ["<node_internals>/**"],
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "openExternally"
+      }
+    }
+  ]
+}
