@@ -1,0 +1,34 @@
+---
+- name: Add service cert to traefik.yml
+  hosts: all
+  become: yes
+  vars:
+    - service_url: "{{ SERVICE_URL }}"
+  tasks:
+    - name: Copy yaml_editor.py
+      copy:
+        src: ../traefik/yaml_editor.py
+        dest: /home/code/yaml_editor.py
+
+    - name: Add service cert to traefik.yml
+      shell:
+        cmd: "python3 /home/code/yaml_editor.py {{ service_url }}"
+
+    - name: Wait until service is running
+      retries: 5
+      delay: 15
+      shell:
+        cmd: "docker service ls | grep traefik_traefik | grep 1/1"
+      register: service_running
+
+    - name: Trigger updates in Traefik
+      shell:
+        cmd: "docker service update traefik_traefik --force"
+      register: update_service
+
+    - name: Delete artifact files
+      file:
+        path: "/home/code/{{ item }}"
+        state: absent
+      loop:
+        - "yaml_editor.py"
